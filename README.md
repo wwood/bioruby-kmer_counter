@@ -15,7 +15,7 @@ Note: this software is under active development!
 ## Installation
 
 ```sh
-    gem install bio-kmer_counter
+gem install bio-kmer_counter
 ```
 
 ## Usage
@@ -25,11 +25,16 @@ content, reporting the fingerprint of 5kb windows in each sequence separately,
 plus the leftover part if it is longer than 2kb:
 
 ```sh
-    kmer_counter.rb <fasta_file> >tetranucleotide_content.csv
+kmer_counter.rb <fasta_file> >tetranucleotide_content.csv
 ```
 
 The fingerprints are reported in percentages. Well, between 0 and 1, that is.
-From there it is up to you how to use the fingerprints, sorry.
+From there it is up to you how to use the fingerprints, sorry. For the full
+gamut of options, see
+
+```sh
+kmer_counter.rb -h
+```
 
 ## Project home page
 

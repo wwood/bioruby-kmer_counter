@@ -8,5 +8,9 @@
 #
 # In this file only require other files. Avoid other source code.
 
+require 'bio-logger'
+Bio::Log::LoggerPlus.new('bio-kmer_counter')
+
+require 'bio'
 require 'bio-kmer_counter/kmer_counter.rb'
 

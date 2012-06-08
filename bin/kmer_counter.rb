@@ -18,6 +18,9 @@ options = {
   :contig_name => false,
   :sequence_length => false,
   :logger => 'stderr',
+  :threads => 1,
+  :processes => 1,
+  :progressbar => true,
 }
 
 OptionParser.new do |opts|
@@ -64,10 +67,17 @@ OptionParser.new do |opts|
     options[:sequence_length] = true
   end
   
-  opts.on("-t", "--threads NUM_THREADS", "Use this many threads [default #{options[:threads]}]") do |v|
+  opts.on("-p", "--processes NUM_PROCESSES", "Use this many processes. Currently setting multiple processes means there is no progress bar [default #{options[:processes]}]") do |v|
+    options[:processes] = v.to_i
+    if options[:processes] < 1
+      raise "Unexpected number of processes specified (after converting to integer) - '#{options[:processes]}'"
+    end
+  end
+  
+  opts.on("-t", "--threads NUM_THREADS", "Use this many threads. This currently only makes sense if you are running on JRuby, since the standard MRI ruby 1.9 can't use multiple cores. Maybe use --processes instead? [default #{options[:threads]}]") do |v|
     options[:threads] = v.to_i
     if options[:threads] < 1
-      raise Exception, "Unexpected number of threads specified (after converting to integer) - '#{options[:threads]}'"
+      raise "Unexpected number of threads specified (after converting to integer) - '#{options[:threads]}'"
     end
   end
   
@@ -83,6 +93,12 @@ OptionParser.new do |opts|
     Bio::Log::CLI.trace(s)
   end
 end.parse!
+if ARGV.length != 1
+  $stderr.puts o
+  exit 1
+end
+# multiple processes doesn't work well with ProgressBar
+options[:progressbar] = false if options[:processes] != 1
 
 LOG_NAME = 'bio-kmer_counter'
 Bio::Log::CLI.logger(options[:logger]) #bio-logger defaults to STDERR not STDOUT, I disagree
@@ -127,9 +143,10 @@ process_window = lambda do |window,kmer,sequence_name,contig_name|
 end
 
 fasta_filename = ARGV[0]
-progress = ProgressBar.new('kmer_counter', `grep -c '>' '#{fasta_filename}'`.to_i)
+progress = nil
+progress = ProgressBar.new('kmer_counter', `grep -c '>' '#{fasta_filename}'`.to_i) if options[:progressbar]
 ff = Bio::FlatFile.open(fasta_filename) 
-Parallel.each(ff, :in_processes => options[:threads]) do |sequence|
+Parallel.each(ff, :in_processes => options[:processes], :threads => options[:threads]) do |sequence|
 #ff.each do |sequence|
   window_counter = 0
   sequence.seq.window_search(options[:window_size],options[:window_offset]) do |window|
@@ -142,6 +159,8 @@ Parallel.each(ff, :in_processes => options[:threads]) do |sequence|
     sequence.seq[sequence.seq.length-leftover_length..sequence.seq.length],
     options[:kmer], "#{sequence.definition}_leftover_#{window_counter}",sequence.definition)
   end
-  progress.inc
+  progress.inc if options[:progressbar]
 end
-progress.finish
+progress.finish if options[:progressbar]
+
+

@@ -1,5 +1,6 @@
 require 'helper'
 require 'tempfile'
+require 'open3'
 
 class TestBioKmerCounter < Test::Unit::TestCase
   should 'test_lowest_lexigraphical_form' do
@@ -57,6 +58,41 @@ class TestBioKmerCounter < Test::Unit::TestCase
       "one_leftover_2\t1.0\t0.0\n"
 
       assert_equal expected, `#{script_path} -w 4 -k 1 -m 2 #{tempfile.path}`
+    end
+  end
+  
+  should "not give a progressbar with multiple processes" do
+    Tempfile.open('one') do |tempfile|
+      tempfile.puts '>one'
+      tempfile.puts 'ATGCATGCAT' #10 letters long
+      tempfile.close
+      
+      expected = ["ID\tA\tC\n",
+      "one_0\t0.5\t0.5\n",
+      "one_1\t0.5\t0.5\n",
+      "one_leftover_2\t1.0\t0.0\n"]
+
+      # execute command and capture both stdout, and stderr
+      # no extra processes
+      command = "#{script_path} -w 4 -k 1 -m 2 #{tempfile.path}"
+      Open3.popen3(command) do |stdin, stdout, stderr|
+        result = stdout.readlines # convert to string?
+        error  = stderr.readlines
+        
+        assert_not_equal [], error
+        assert_equal expected, result
+      end
+      
+      # execute command and capture both stdout, and stderr
+      # extra processes
+      command = "#{script_path} -p 2 -w 4 -k 1 -m 2 #{tempfile.path}"
+      Open3.popen3(command) do |stdin, stdout, stderr|
+        result = stdout.readlines # convert to string?
+        error  = stderr.readlines
+        
+        assert_equal [], error
+        assert_equal expected, result
+      end
     end
   end
 end

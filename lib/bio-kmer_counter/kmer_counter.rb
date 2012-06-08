@@ -32,12 +32,6 @@ module Bio
       def self.merge_down_to_lowest_lexigraphical_form(hash)
         keys = empty_full_kmer_hash.keys
         
-        # remove keys (kmers) that are not in their lowest lexigraphical form.
-        # Because all possible kmers are already present, the reverse complement of these must already be present in the array
-        keys.select! do |key|
-          Bio::Sequence::NA.new(key).lowest_lexigraphical_form.to_s.upcase == key
-        end
-        
         new_hash = {}
         hash.each do |kmer, count|
           key = Bio::Sequence::NA.new(kmer).lowest_lexigraphical_form.to_s.upcase

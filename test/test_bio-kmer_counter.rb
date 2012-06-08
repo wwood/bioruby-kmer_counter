@@ -44,4 +44,19 @@ class TestBioKmerCounter < Test::Unit::TestCase
       assert_equal "ID\tA\tC\n", `#{script_path} -w 5 -k 1 #{tempfile.path}`
     end
   end
+  
+  should 'give correct increments in window numbering' do
+    Tempfile.open('one') do |tempfile|
+      tempfile.puts '>one'
+      tempfile.puts 'ATGCATGCAT' #10 letters long
+      tempfile.close
+      
+      expected = "ID\tA\tC\n"+
+      "one_0\t0.5\t0.5\n"+
+      "one_1\t0.5\t0.5\n"+
+      "one_leftover_2\t1.0\t0.0\n"
+
+      assert_equal expected, `#{script_path} -w 4 -k 1 -m 2 #{tempfile.path}`
+    end
+  end
 end

@@ -6,6 +6,10 @@ bio-kmer_counter is a simple [biogem](http://biogem.info) for fingerprinting
 nucleotide sequences by counting the occurences of particular kmers in the
 sequence. The methodology is not new, for references see [Teeling et. al. 2004](http://www.biomedcentral.com/1471-2105/5/163). The default parameters are derived from the methods section of [Dick et. al. 2009](http://genomebiology.com/content/10/8/R85).
 
+This methodology is quite different to that of other software that counts
+kmer content with longer kmers, e.g. [khmer](https://github.com/ged-lab/khmer).
+Here only small kmers are intended (e.g. 1mer or 4mer).
+
 Note: this software is under active development!
 
 ## Installation
@@ -44,10 +48,6 @@ Please also cite the tools upon which it is based, one of:
   
 * [BioRuby: bioinformatics software for the Ruby programming language](http://dx.doi.org/10.1093/bioinformatics/btq475)
 * [Biogem: an effective tool-based approach for scaling up open source software development in bioinformatics](http://dx.doi.org/10.1093/bioinformatics/bts080)
-
-## Biogems.info
-
-This Biogem is published at [#bio-kmer_counter](http://biogems.info/index.html)
 
 ## Copyright
 

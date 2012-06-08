@@ -133,7 +133,7 @@ process_window = lambda do |window,kmer,sequence_name,contig_name|
     log.warn "Skipping window #{sequence_name} because few/none ATGC's were detected (was it all N's?)"
   else
     print "#{sequence_name}"
-    new_counts.keys.each do |tetramer|
+    new_counts.keys.sort.each do |tetramer|
       print "\t#{new_counts[tetramer].to_f/num_kmers_counted}"
     end
     print "\t#{window.length}" if options[:sequence_length]

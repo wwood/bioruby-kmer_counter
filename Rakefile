@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "bio-kmer_counter"
   gem.homepage = "http://github.com/wwood/bioruby-kmer_counter"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{A biogem for counting small kmers for fingerprinting nucleotide sequences}
+  gem.description = %Q{A biogem for counting small kmers for fingerprinting nucleotide sequences. See README for details.}
   gem.email = "gmail.com after donttrustben"
   gem.authors = ["Ben J Woodcroft"]
   # dependencies defined in Gemfile

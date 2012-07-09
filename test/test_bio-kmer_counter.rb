@@ -95,4 +95,11 @@ class TestBioKmerCounter < Test::Unit::TestCase
       end
     end
   end
+  
+  should "print help when no arguments are given" do
+    command = "#{script_path}"
+    Open3.popen3(command) do |stdin, stdout, stderr|
+      assert stderr.readlines[0].match(/^Usage: kmer_counter/)
+    end
+  end
 end

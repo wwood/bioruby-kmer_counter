@@ -23,7 +23,7 @@ options = {
   :progressbar => true,
 }
 
-OptionParser.new do |opts|
+o = OptionParser.new do |opts|
   opts.banner = USAGE
 
   opts.on("-w", "--window-size SIZE", "Length of the window to be used [default #{options[:window_size]}]") do |v|
@@ -92,7 +92,7 @@ OptionParser.new do |opts|
   opts.on("--trace options",String,"Set log level [default INFO]. e.g. '--trace debug' to set logging level to DEBUG") do | s |
     Bio::Log::CLI.trace(s)
   end
-end.parse!
+end; o.parse!
 if ARGV.length != 1
   $stderr.puts o
   exit 1

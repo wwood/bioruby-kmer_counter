@@ -102,4 +102,14 @@ class TestBioKmerCounter < Test::Unit::TestCase
       assert stderr.readlines[0].match(/^Usage: kmer_counter/)
     end
   end
+  
+  should 'work with lowercase' do
+    Tempfile.open('one') do |tempfile|
+      tempfile.puts '>one'
+      tempfile.puts 'acagt'
+      tempfile.close
+
+      assert_equal "ID\tA\tC\none_0\t0.6\t0.4\n", `#{script_path} -w 5 -k 1 #{tempfile.path}`
+    end
+  end
 end

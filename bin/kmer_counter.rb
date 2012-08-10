@@ -120,7 +120,6 @@ process_window = lambda do |window,kmer,sequence_name,contig_name|
   
   window.window_search(options[:kmer],1) do |tetranucleotide|
     str = tetranucleotide.to_s
-    str.upcase!
     next unless str.gsub(/[ATGC]+/,'') == ''
     num_kmers_counted += 1
     counts[str]+=1
@@ -150,6 +149,7 @@ ff = Bio::FlatFile.open(fasta_filename)
 Parallel.each(ff, :in_processes => options[:processes], :threads => options[:threads]) do |sequence|
 #ff.each do |sequence|
   window_counter = 0
+  sequence.seq.upcase!
   sequence.seq.window_search(options[:window_size],options[:window_offset]) do |window|
     process_window.call(window, options[:kmer], "#{sequence.definition}_#{window_counter}",sequence.definition)
     window_counter += 1

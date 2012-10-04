@@ -77,4 +77,25 @@ class TestBioKmerCounter < Test::Unit::TestCase
       assert_equal "ID\tA\tC\none_0\t0.6\t0.4\n", `#{script_path} -w 5 -k 1 #{tempfile.path}`
     end
   end
+  
+  should 'not leave out sequences less than the minimum length' do
+    Tempfile.open('one') do |tempfile|
+      tempfile.puts '>one'
+      tempfile.puts 'acagt'
+      tempfile.close
+
+      assert_equal "ID\tA\tC\none_leftover_0\t0.6\t0.4\n", `#{script_path} -w 10 -m 2 -k 1 #{tempfile.path}`
+    end
+  end
+  
+  should 'not leave out sequences less than the minimum length using default parameters' do
+    Tempfile.open('one') do |tempfile|
+      tempfile.puts '>one'
+      tempfile.print 'A'*2000
+      tempfile.puts 'G'*200
+      tempfile.close
+
+      assert_equal 2, `#{script_path} #{tempfile.path}`.split("\n").length
+    end
+  end
 end

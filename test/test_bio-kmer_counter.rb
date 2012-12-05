@@ -77,4 +77,24 @@ class TestBioKmerCounter < Test::Unit::TestCase
       assert_equal "ID\tA\tC\none_0\t0.6\t0.4\n", `#{script_path} -w 5 -k 1 #{tempfile.path}`
     end
   end
+  
+  should 'by default count contigs greater than 2kb but less than 5kb' do
+    Tempfile.open('one') do |tempfile|
+      tempfile.puts '>one'
+      tempfile.puts 'A'*2500
+      tempfile.close
+
+      assert_equal "ID\tA\tC\none_leftover_0\t1.0\t0.0\n", `#{script_path} -k 1 #{tempfile.path}`
+    end
+  end
+  
+  should 'by default count contigs greater than 2kb but less than 5kb' do
+    Tempfile.open('one') do |tempfile|
+      tempfile.puts '>one'
+      tempfile.puts 'A'*7500
+      tempfile.close
+
+      assert_equal "ID\tA\tC\none_0\t1.0\t0.0\none_leftover_1\t1.0\t0.0\n", `#{script_path} -k 1 #{tempfile.path}`
+    end
+  end
 end

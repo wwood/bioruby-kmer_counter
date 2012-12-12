@@ -20,12 +20,16 @@ After installing [Ruby](http://www.ruby-lang.org) itself, install the bio-kmer_c
 gem install bio-kmer_counter
 ```
 
+bio-kmer_counter is only tested on Linux, but probably works on OSX too. It might even work on Windows if you
+the progress bar is turned off. Maybe.
+
 ## Usage
 
 The default parameters analyse a fasta file that contains one or more sequences in it for 4-mer (tetranucleotide)
 content. The fingerprints of 5kb windows in each sequence are reported separately.
-If the leftover bit at the end is longer than 2kb, then this is also included. By default, any sequence 
-in the fasta file with length greater than 2kb is included at least once.
+If the leftover bit at the end is 2kb or longer then this is also included, even if the sequence was
+shorter than 5kb. So by default, any sequence 
+in the fasta file 2kb or longer is included at least once.
 
 By default, each 4 base window in the input sequence is included at exactly once in the output file.
 To account for the fact 
@@ -35,6 +39,7 @@ depends on which one comes first alphabetically. So for instance if the window i
 is used. Accounting for palindromic sequences like ```ATAT```, there are 136 of these lowest lexigraphical 4-mers.
 So there are 136 columns in the output, plus one for the name of the window.
 
+Example usage:
 ```sh
 kmer_counter.rb my_nucleotide_seqeunces.fasta >tetranucleotide_content.csv
 ```

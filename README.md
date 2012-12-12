@@ -42,7 +42,7 @@ So there are 136 columns in the output, plus one for the name of the window.
 
 Example usage:
 ```sh
-kmer_counter.rb my_nucleotide_seqeunces.fasta >tetranucleotide_content.csv
+kmer_counter.rb my_nucleotide_sequences.fasta >tetranucleotide_content.csv
 ```
 
 The fingerprints are reported in percentages. Well, between 0 and 1, that is.

@@ -8,7 +8,7 @@ sequence. The methodology is not new, for a reference see [Teeling et. al. 2004]
 
 This methodology is quite different to that of other software that counts
 kmer content with longer kmers, e.g. [khmer](https://github.com/ged-lab/khmer).
-Here only small kmers are intended (e.g. 1mer or 4mer).
+Here only small kmers are intended (e.g. 1-mer or 4-mer).
 
 Note: this software is under active development!
 
@@ -22,12 +22,21 @@ gem install bio-kmer_counter
 
 ## Usage
 
-To analyse a fasta file (that contains one or more sequences in it) for 4-mer (tetranucleotide)
-content, reporting the fingerprint of 5kb windows in each sequence separately,
-plus the leftover part if it is longer than 2kb:
+The default parameters analyse a fasta file that contains one or more sequences in it for 4-mer (tetranucleotide)
+content. The fingerprints of 5kb windows in each sequence are reported separately.
+If the leftover bit at the end is longer than 2kb, then this is also included. By default, any sequence 
+in the fasta file with length greater than 2kb is included at least once.
+
+By default, each 4 base window in the input sequence is included at exactly once in the output file.
+To account for the fact 
+that the directions of sequences with respect to each other are presumed to be unknown (as is the
+case for de-novo genome assembly), either the forward or reverse complement is included. Which one
+depends on which one comes first alphabetically. So for instance if the window is ```CTTT```, then ```AAAG```
+is used. Accounting for palindromic sequences like ```ATAT```, there are 136 of these lowest lexigraphical 4-mers.
+So there are 136 columns in the output, plus one for the name of the window.
 
 ```sh
-kmer_counter.rb <fasta_file> >tetranucleotide_content.csv
+kmer_counter.rb my_nucleotide_seqeunces.fasta >tetranucleotide_content.csv
 ```
 
 The fingerprints are reported in percentages. Well, between 0 and 1, that is.

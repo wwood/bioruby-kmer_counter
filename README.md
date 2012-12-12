@@ -27,20 +27,22 @@ the progress bar is turned off. Maybe.
 ## Usage
 
 The default parameters analyse a fasta file that contains one or more sequences in it for 4-mer (tetranucleotide)
-content. The fingerprints of 5kb windows in each sequence are reported separately.
-If the leftover bit at the end is 2kb or longer then this is also included, even if the sequence was
-shorter than 5kb. So by default, any sequence 
-in the fasta file 2kb or longer is included at least once.
+content. By default, any sequence 
+in the fasta file 2kb or longer is included at least once. Sequences are split up
+into 5kb windows if they are that long, and each window is reported separately.
+If the leftover bit at the end after any 5kb windows is 2kb or longer then this is also included.
 
-By default, each 4 base window in the input sequence is included at exactly once in the output file.
+By default, each 4 base window in the input sequence is included exactly once in the output file.
 To account for the fact 
 that the directions of sequences with respect to each other are presumed to be unknown (as is the
 case for de-novo genome assembly), either the forward or reverse complement is included. Which one
-depends on which one comes first alphabetically. So for instance if the window is ```CTTT```, then ```AAAG```
+(forward or reverse) depends on which one comes first alphabetically. So for instance if the window is ```CTTT```, then ```AAAG```
 is used. Accounting for palindromic sequences like ```ATAT```, there are 136 of these lowest lexigraphical 4-mers.
-So there are 136 columns in the output, plus one for the name of the window.
+So there are 136 columns in the output, plus one for the name of the window. Using only 1 is
+actually slightly different than the method outlined in Dick et. al. 2009, but we
+don't expect the results to differ.
 
-Example usage:
+Example usage, if you wish to fingerprint a fasta file ```my_nucleotide_sequences.fasta```:
 ```sh
 kmer_counter.rb my_nucleotide_sequences.fasta >tetranucleotide_content.csv
 ```

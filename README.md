@@ -21,7 +21,7 @@ After installing [Ruby](http://www.ruby-lang.org) itself, install the bio-kmer_c
 gem install bio-kmer_counter
 ```
 
-bio-kmer_counter is only tested on Linux, but probably works on OSX too. It might even work on Windows if you
+bio-kmer_counter is only tested on Linux, but probably works on OSX too. It might even work on Windows if
 the progress bar is turned off. Maybe.
 
 ## Usage

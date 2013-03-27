@@ -11,8 +11,8 @@ gem 'bio-logger', '>=1.0.1'
 # Include everything needed to run rake, tests, features, etc.
 group :development do
   gem "shoulda", ">= 0"
-  gem "rdoc", "~> 3.12"
-  gem "jeweler", "~> 1.8.3"
+  gem "rdoc", ">= 3.12"
+  gem "jeweler",">= 1.8.3"
   gem "bundler", ">= 1.0.21"
-  gem "rdoc", "~> 3.12"
+  gem "rdoc", ">= 3.12"
 end

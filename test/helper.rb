@@ -14,5 +14,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'bio-kmer_counter'
 
+TEST_DATA_DIR = File.join(File.dirname(__FILE__), 'data')
+
 class Test::Unit::TestCase
 end

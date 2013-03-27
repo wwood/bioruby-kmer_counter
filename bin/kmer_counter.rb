@@ -64,8 +64,8 @@ o = OptionParser.new do |opts|
   opts.on("-l", "--window-length", "print the length of the window in the output [default #{options[:sequence_length]}]") do |v|
     options[:sequence_length] = true
   end
-  
-  
+
+
   # logger options
   opts.on("-q", "--quiet", "Run quietly, set logging to ERROR level [default INFO]") do |q|
     Bio::Log::CLI.trace('error')
@@ -90,7 +90,7 @@ Bio::Log::CLI.configure(LOG_NAME)
 
 # Print headers
 print "ID\t"
-print Bio::Sequence::Kmer.merge_down_to_lowest_lexigraphical_form(Bio::Sequence::Kmer.empty_full_kmer_hash(options[:kmer])).keys.join("\t")
+print Bio::Sequence::Kmer.merge_down_to_lowest_lexigraphical_form(Bio::Sequence::Kmer.empty_full_kmer_hash(options[:kmer])).keys.sort.join("\t")
 print "\tWindowLength" if options[:sequence_length]
 print "\tcontig" if options[:contig_name]
 puts
@@ -99,7 +99,7 @@ orig = Bio::Sequence::Kmer.empty_full_kmer_hash(options[:kmer])
 process_window = lambda do |window,kmer,sequence_name,contig_name|
   counts = orig.dup
   num_kmers_counted = 0
-  
+
   window.window_search(options[:kmer],1) do |tetranucleotide|
     str = tetranucleotide.to_s
     next unless str.gsub(/[ATGC]+/,'') == ''
@@ -107,10 +107,10 @@ process_window = lambda do |window,kmer,sequence_name,contig_name|
     counts[str]+=1
     #counts[Bio::Sequence::NA.new(tetranucleotide).lowest_lexigraphical_form.to_s.upcase] += 1
   end
-  
+
   # Merge everything into lowest lexigraphical form
   new_counts = Bio::Sequence::Kmer.merge_down_to_lowest_lexigraphical_form counts
-  
+
   if num_kmers_counted == 0
     log.warn "Skipping window #{sequence_name} because few/none ATGC's were detected (was it all N's?)"
   else
@@ -127,7 +127,7 @@ end
 fasta_filename = ARGV[0]
 progress = nil
 progress = ProgressBar.new('kmer_counter', `grep -c '>' '#{fasta_filename}'`.to_i) if options[:progressbar]
-ff = Bio::FlatFile.open(fasta_filename) 
+ff = Bio::FlatFile.open(fasta_filename)
 
 ff.each do |sequence|
   window_counter = 0
